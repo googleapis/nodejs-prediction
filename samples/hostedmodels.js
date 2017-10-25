@@ -13,7 +13,7 @@
 
 'use strict';
 
-// [START predict]
+// [START prediction_quickstart]
 var google = require('googleapis');
 
 function auth (callback) {
@@ -70,12 +70,12 @@ function predict (phrase, callback) {
       }
 
       // Received prediction result
-      console.log('Sentiment for "' + phrase + '": ' + prediction.outputLabel);
+      console.log(`Sentiment for "${phrase}": ${prediction.outputLabel}`);
       callback(null, prediction);
     });
   });
 }
-// [END predict]
+// [END prediction_quickstart]
 
 // Run the examples
 exports.main = function (phrase, cb) {

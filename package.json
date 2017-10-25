@@ -36,7 +36,7 @@
     "CONTRIBUTORS",
     "LICENSE"
   ],
-  "repository": "googlecloudplatform/google-cloud-node",
+  "repository": "googleapis/nodejs-prediction",
   "keywords": [
     "google apis client",
     "google api client",
@@ -61,6 +61,7 @@
     "through2": "^2.0.0"
   },
   "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^2.0.11",
     "@google-cloud/storage": "*",
     "async": "^2.1.4",
     "concat-stream": "^1.5.0",
@@ -69,7 +70,7 @@
     "uuid": "^3.0.1"
   },
   "scripts": {
-    "publish-module": "node ../../scripts/publish.js prediction",
+    "generate-scaffolding": "repo-tools generate all && repo-tools generate lib_samples_readme -l samples/ --config ../.cloud-repo-tools.json",
     "test": "mocha test/*.js",
     "system-test": "mocha system-test/*.js --no-timeouts --bail"
   },
