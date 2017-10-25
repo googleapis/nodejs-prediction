@@ -196,9 +196,9 @@ function Model(prediction, id) {
      */
     setMetadata: {
       reqOpts: {
-        method: 'PUT'
-      }
-    }
+        method: 'PUT',
+      },
+    },
   };
 
   common.ServiceObject.call(this, {
@@ -206,7 +206,7 @@ function Model(prediction, id) {
     baseUrl: '/trainedmodels',
     id: id,
     createMethod: prediction.createModel.bind(prediction),
-    methods: methods
+    methods: methods,
   });
 }
 
@@ -243,21 +243,24 @@ util.inherits(Model, common.ServiceObject);
  * });
  */
 Model.prototype.analyze = function(callback) {
-  this.request({
-    uri: '/analyze'
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, resp);
-      return;
+  this.request(
+    {
+      uri: '/analyze',
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, resp);
+        return;
+      }
+
+      var analysis = {
+        data: resp.dataDescription || {},
+        model: resp.modelDescription || {},
+      };
+
+      callback(null, analysis, resp);
     }
-
-    var analysis = {
-      data: resp.dataDescription || {},
-      model: resp.modelDescription || {}
-    };
-
-    callback(null, analysis, resp);
-  });
+  );
 };
 
 /**
@@ -291,7 +294,7 @@ Model.prototype.createWriteStream = function(label) {
   writeStream.once('writing', function() {
     var template = JSON.stringify({
       output: label,
-      csvInstance: [[]]
+      csvInstance: [[]],
     }).split('[]');
 
     var requestStream = self.requestStream({
@@ -299,8 +302,8 @@ Model.prototype.createWriteStream = function(label) {
       uri: '',
       headers: {
         accept: 'application/json',
-        'content-type': 'application/json'
-      }
+        'content-type': 'application/json',
+      },
     });
 
     requestStream
@@ -322,9 +325,9 @@ Model.prototype.createWriteStream = function(label) {
       });
 
     writeStream.setPipeline([
-      through({ encoding: 'utf-8' }),
+      through({encoding: 'utf-8'}),
       JSONStream.stringify(template[0], ',', template[1]),
-      requestStream
+      requestStream,
     ]);
   });
 
@@ -375,37 +378,40 @@ Model.prototype.createWriteStream = function(label) {
  * });
  */
 Model.prototype.query = function(input, callback) {
-  this.request({
-    method: 'POST',
-    uri: '/predict',
-    json: {
-      input: {
-        csvInstance: arrify(input)
+  this.request(
+    {
+      method: 'POST',
+      uri: '/predict',
+      json: {
+        input: {
+          csvInstance: arrify(input),
+        },
+      },
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, resp);
+        return;
       }
-    }
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, resp);
-      return;
-    }
 
-    var results = {
-      winner: resp.outputLabel || resp.outputValue,
-    };
+      var results = {
+        winner: resp.outputLabel || resp.outputValue,
+      };
 
-    if (resp.outputMulti) {
-      results.scores = resp.outputMulti
-        .sort(function(a, b) {
-          return a.score < b.score ? 1 : a.score > b.score ? -1 : 0;
-        })
-        .map(function(scoreObject) {
-          scoreObject.score = parseFloat(scoreObject.score);
-          return scoreObject;
-        });
+      if (resp.outputMulti) {
+        results.scores = resp.outputMulti
+          .sort(function(a, b) {
+            return a.score < b.score ? 1 : a.score > b.score ? -1 : 0;
+          })
+          .map(function(scoreObject) {
+            scoreObject.score = parseFloat(scoreObject.score);
+            return scoreObject;
+          });
+      }
+
+      callback(null, results, resp);
     }
-
-    callback(null, results, resp);
-  });
+  );
 };
 
 /**
@@ -435,10 +441,13 @@ Model.prototype.query = function(input, callback) {
  * });
  */
 Model.prototype.train = function(label, input, callback) {
-  this.setMetadata({
-    output: label,
-    csvInstance: arrify(input)
-  }, callback);
+  this.setMetadata(
+    {
+      output: label,
+      csvInstance: arrify(input),
+    },
+    callback
+  );
 };
 
 /*! Developer Documentation

@@ -49,7 +49,7 @@ var fakePaginator = {
   },
   streamify: function(methodName) {
     return methodName;
-  }
+  },
 };
 
 var promisified = false;
@@ -62,7 +62,7 @@ var fakeUtil = extend({}, util, {
 
     promisified = true;
     assert.deepEqual(options.exclude, ['model']);
-  }
+  },
 });
 
 describe('Prediction', function() {
@@ -76,7 +76,7 @@ describe('Prediction', function() {
       '@google-cloud/common': {
         Service: FakeService,
         paginator: fakePaginator,
-        util: fakeUtil
+        util: fakeUtil,
       },
       './model.js': FakeModel,
     });
@@ -84,7 +84,7 @@ describe('Prediction', function() {
 
   beforeEach(function() {
     prediction = new Prediction({
-      projectId: PROJECT_ID
+      projectId: PROJECT_ID,
     });
   });
 
@@ -104,7 +104,7 @@ describe('Prediction', function() {
     it('should normalize the arguments', function() {
       var normalizeArguments = fakeUtil.normalizeArguments;
       var normalizeArgumentsCalled = false;
-      var fakeOptions = { projectId: PROJECT_ID };
+      var fakeOptions = {projectId: PROJECT_ID};
       var fakeContext = {};
 
       fakeUtil.normalizeArguments = function(context, options) {
@@ -129,7 +129,7 @@ describe('Prediction', function() {
       assert.strictEqual(calledWith.baseUrl, baseUrl);
       assert.deepEqual(calledWith.scopes, [
         'https://www.googleapis.com/auth/prediction',
-        'https://www.googleapis.com/auth/devstorage.read_only'
+        'https://www.googleapis.com/auth/devstorage.read_only',
       ]);
       assert.deepEqual(calledWith.packageJson, require('../package.json'));
     });
@@ -139,7 +139,7 @@ describe('Prediction', function() {
     var ID = 'new-model-id';
     var OPTIONS = {
       a: 'b',
-      c: 'd'
+      c: 'd',
     };
 
     it('should throw if a model ID is not provided', function() {
@@ -154,7 +154,7 @@ describe('Prediction', function() {
         assert.strictEqual(reqOpts.uri, '/trainedmodels');
 
         var expectedBody = extend({}, OPTIONS, {
-          id: ID
+          id: ID,
         });
         assert.deepEqual(reqOpts.json, expectedBody);
 
@@ -175,8 +175,8 @@ describe('Prediction', function() {
       var file = {
         name: 'file-name',
         parent: {
-          name: 'bucket-name'
-        }
+          name: 'bucket-name',
+        },
       };
 
       prediction.request = function(reqOpts) {
@@ -186,9 +186,13 @@ describe('Prediction', function() {
         done();
       };
 
-      prediction.createModel(ID, {
-        data: file
-      }, assert.ifError);
+      prediction.createModel(
+        ID,
+        {
+          data: file,
+        },
+        assert.ifError
+      );
     });
 
     it('should accept a model type', function(done) {
@@ -200,9 +204,13 @@ describe('Prediction', function() {
         done();
       };
 
-      prediction.createModel(ID, {
-        type: type
-      }, assert.ifError);
+      prediction.createModel(
+        ID,
+        {
+          type: type,
+        },
+        assert.ifError
+      );
     });
 
     describe('error', function() {
@@ -227,7 +235,7 @@ describe('Prediction', function() {
 
     describe('success', function() {
       var apiResponse = {
-        id: ID
+        id: ID,
       };
       var model = {};
 
@@ -318,10 +326,10 @@ describe('Prediction', function() {
 
     describe('success', function() {
       var MODEL = {
-        id: 'model-id'
+        id: 'model-id',
       };
       var apiResponse = {
-        items: [MODEL]
+        items: [MODEL],
       };
 
       beforeEach(function() {
@@ -346,10 +354,10 @@ describe('Prediction', function() {
 
       it('should set a nextQuery if necessary', function(done) {
         var apiResponseWithNextPageToken = extend({}, apiResponse, {
-          nextPageToken: 'next-page-token'
+          nextPageToken: 'next-page-token',
         });
 
-        var query = { a: 'b', c: 'd' };
+        var query = {a: 'b', c: 'd'};
         var originalQuery = extend({}, query);
 
         prediction.request = function(reqOpts, callback) {
@@ -362,9 +370,12 @@ describe('Prediction', function() {
           // Check the original query wasn't modified.
           assert.deepEqual(query, originalQuery);
 
-          assert.deepEqual(nextQuery, extend({}, query, {
-            pageToken: apiResponseWithNextPageToken.nextPageToken
-          }));
+          assert.deepEqual(
+            nextQuery,
+            extend({}, query, {
+              pageToken: apiResponseWithNextPageToken.nextPageToken,
+            })
+          );
 
           done();
         });
