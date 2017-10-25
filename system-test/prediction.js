@@ -21,14 +21,13 @@ var async = require('async');
 var Storage = require('@google-cloud/storage');
 var uuid = require('uuid');
 
-var env = require('../../../system-test/env.js');
 var Prediction = require('../');
 
 describe('Prediction', function() {
   var TESTS_PREFIX = 'gcloud-test-prediction-';
 
-  var prediction = new Prediction(env);
-  var storage = new Storage(env);
+  var prediction = new Prediction();
+  var storage = new Storage();
 
   var bucket = storage.bucket(generateName());
   var file = bucket.file('language_id.txt');
