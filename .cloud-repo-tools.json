@@ -3,7 +3,8 @@
   "requiresProjectId": true,
   "product": "prediction",
   "client_reference_url": "https://cloud.google.com/nodejs/docs/reference/prediction/latest/",
-  "release_quality": "alpha",
+  "release_quality": "deprecated",
+  "deprecated": "The API will be shut down on April 30, 2018. See the [Prediction API End of Life FAQ](https://cloud.google.com/prediction/docs/end-of-life-faq) for more information.",
   "samples": [
     {
       "id": "hostedmodels",
