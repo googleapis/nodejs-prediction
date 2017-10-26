@@ -2,7 +2,7 @@
 
 # Google Prediction API: Node.js Client
 
-[![release level](https://img.shields.io/badge/release%20level-alpha-orange.svg?style&#x3D;flat)](https://cloud.google.com/terms/launch-stages)
+[![release level](https://img.shields.io/badge/release%20level-deprecated-red.svg?style&#x3D;flat)](https://cloud.google.com/terms/launch-stages)
 [![CircleCI](https://img.shields.io/circleci/project/github/googleapis/nodejs-prediction.svg?style=flat)](https://circleci.com/gh/googleapis/nodejs-prediction)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/googleapis/nodejs-prediction?branch=master&svg=true)](https://ci.appveyor.com/project/googleapis/nodejs-prediction)
 [![codecov](https://img.shields.io/codecov/c/github/googleapis/nodejs-prediction/master.svg?style=flat)](https://codecov.io/gh/googleapis/nodejs-prediction)
@@ -10,6 +10,10 @@
 > Node.js idiomatic client for [Prediction API][product-docs].
 
 The [Cloud Prediction API](https://cloud.google.com/prediction/docs) provides a RESTful API to build Machine Learning models.
+
+| :warning: Deprecated Module |
+| --- |
+| This library is **deprecated**. The API will be shut down on April 30, 2018. See the [Prediction API End of Life FAQ](https://cloud.google.com/prediction/docs/end-of-life-faq) for more information. |
 
 * [Prediction API Node.js Client API Reference][client-docs]
 * [Prediction API Documentation][product-docs]
@@ -63,8 +67,8 @@ Google APIs Client Libraries, in [Client Libraries Explained][explained].
 ```javascript
 var google = require('googleapis');
 
-function auth (callback) {
-  google.auth.getApplicationDefault(function (err, authClient) {
+function auth(callback) {
+  google.auth.getApplicationDefault(function(err, authClient) {
     if (err) {
       return callback(err);
     }
@@ -79,7 +83,7 @@ function auth (callback) {
       // Scopes can be specified either as an array or as a single,
       // space-delimited string.
       authClient = authClient.createScoped([
-        'https://www.googleapis.com/auth/prediction'
+        'https://www.googleapis.com/auth/prediction',
       ]);
     }
     callback(null, authClient);
@@ -91,35 +95,38 @@ function auth (callback) {
  * e.g. "good morning".
  * @param {Function} callback Callback function.
  */
-function predict (phrase, callback) {
-  auth(function (err, authClient) {
+function predict(phrase, callback) {
+  auth(function(err, authClient) {
     if (err) {
       return callback(err);
     }
     var hostedmodels = google.prediction({
       version: 'v1.6',
-      auth: authClient
+      auth: authClient,
     }).hostedmodels;
     // Predict the sentiment for the provided phrase
-    hostedmodels.predict({
-      // Project id used for this sample
-      project: '414649711441',
-      hostedModelName: 'sample.sentiment',
-      resource: {
-        input: {
-          // Predict sentiment of the provided phrase
-          csvInstance: phrase.split(/\s/gi)
+    hostedmodels.predict(
+      {
+        // Project id used for this sample
+        project: '414649711441',
+        hostedModelName: 'sample.sentiment',
+        resource: {
+          input: {
+            // Predict sentiment of the provided phrase
+            csvInstance: phrase.split(/\s/gi),
+          },
+        },
+      },
+      function(err, prediction) {
+        if (err) {
+          return callback(err);
         }
-      }
-    }, function (err, prediction) {
-      if (err) {
-        return callback(err);
-      }
 
-      // Received prediction result
-      console.log(`Sentiment for "${phrase}": ${prediction.outputLabel}`);
-      callback(null, prediction);
-    });
+        // Received prediction result
+        console.log(`Sentiment for "${phrase}": ${prediction.outputLabel}`);
+        callback(null, prediction);
+      }
+    );
   });
 }
 ```
@@ -140,9 +147,9 @@ also contains samples.
 
 This library follows [Semantic Versioning](http://semver.org/).
 
-This library is considered to be in **alpha**. This means it is still a
-work-in-progress and under active development. Any release is subject to
-backwards-incompatible changes at any time.
+This library is **deprecated**. This means that it is no longer being
+actively maintained and the only updates the library will receive will
+be for critical security issues. 
 
 More Information: [Google Cloud Platform Launch Stages][launch_stages]
 
