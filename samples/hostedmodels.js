@@ -13,11 +13,11 @@
 
 'use strict';
 
-// [START predict]
+// [START prediction_quickstart]
 var google = require('googleapis');
 
-function auth (callback) {
-  google.auth.getApplicationDefault(function (err, authClient) {
+function auth(callback) {
+  google.auth.getApplicationDefault(function(err, authClient) {
     if (err) {
       return callback(err);
     }
@@ -32,7 +32,7 @@ function auth (callback) {
       // Scopes can be specified either as an array or as a single,
       // space-delimited string.
       authClient = authClient.createScoped([
-        'https://www.googleapis.com/auth/prediction'
+        'https://www.googleapis.com/auth/prediction',
       ]);
     }
     callback(null, authClient);
@@ -44,41 +44,44 @@ function auth (callback) {
  * e.g. "good morning".
  * @param {Function} callback Callback function.
  */
-function predict (phrase, callback) {
-  auth(function (err, authClient) {
+function predict(phrase, callback) {
+  auth(function(err, authClient) {
     if (err) {
       return callback(err);
     }
     var hostedmodels = google.prediction({
       version: 'v1.6',
-      auth: authClient
+      auth: authClient,
     }).hostedmodels;
     // Predict the sentiment for the provided phrase
-    hostedmodels.predict({
-      // Project id used for this sample
-      project: '414649711441',
-      hostedModelName: 'sample.sentiment',
-      resource: {
-        input: {
-          // Predict sentiment of the provided phrase
-          csvInstance: phrase.split(/\s/gi)
+    hostedmodels.predict(
+      {
+        // Project id used for this sample
+        project: '414649711441',
+        hostedModelName: 'sample.sentiment',
+        resource: {
+          input: {
+            // Predict sentiment of the provided phrase
+            csvInstance: phrase.split(/\s/gi),
+          },
+        },
+      },
+      function(err, prediction) {
+        if (err) {
+          return callback(err);
         }
-      }
-    }, function (err, prediction) {
-      if (err) {
-        return callback(err);
-      }
 
-      // Received prediction result
-      console.log('Sentiment for "' + phrase + '": ' + prediction.outputLabel);
-      callback(null, prediction);
-    });
+        // Received prediction result
+        console.log(`Sentiment for "${phrase}": ${prediction.outputLabel}`);
+        callback(null, prediction);
+      }
+    );
   });
 }
-// [END predict]
+// [END prediction_quickstart]
 
 // Run the examples
-exports.main = function (phrase, cb) {
+exports.main = function(phrase, cb) {
   predict(phrase || 'good morning', cb || console.log);
 };
 

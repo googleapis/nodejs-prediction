@@ -66,9 +66,9 @@ function Prediction(options) {
     baseUrl: 'https://www.googleapis.com/prediction/v1.6',
     scopes: [
       'https://www.googleapis.com/auth/prediction',
-      'https://www.googleapis.com/auth/devstorage.read_only'
+      'https://www.googleapis.com/auth/devstorage.read_only',
     ],
-    packageJson: require('../package.json')
+    packageJson: require('../package.json'),
   };
 
   common.Service.call(this, config, options);
@@ -143,7 +143,7 @@ Prediction.prototype.createModel = function(id, options, callback) {
   }
 
   var body = extend({}, options, {
-    id: id
+    id: id,
   });
 
   if (body.data) {
@@ -151,7 +151,7 @@ Prediction.prototype.createModel = function(id, options, callback) {
 
     body.storageDataLocation = format('{bucket}/{fileName}', {
       bucket: file.parent.name,
-      fileName: file.name
+      fileName: file.name,
     });
 
     delete body.data;
@@ -162,21 +162,24 @@ Prediction.prototype.createModel = function(id, options, callback) {
     delete body.type;
   }
 
-  this.request({
-    method: 'POST',
-    uri: '/trainedmodels',
-    json: body
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, resp);
-      return;
+  this.request(
+    {
+      method: 'POST',
+      uri: '/trainedmodels',
+      json: body,
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, resp);
+        return;
+      }
+
+      var model = self.model(resp.id);
+      model.metadata = resp;
+
+      callback(null, model, resp);
     }
-
-    var model = self.model(resp.id);
-    model.metadata = resp;
-
-    callback(null, model, resp);
-  });
+  );
 };
 
 /**
@@ -241,31 +244,34 @@ Prediction.prototype.getModels = function(query, callback) {
     query = {};
   }
 
-  this.request({
-    uri: '/trainedmodels/list',
-    qs: query
-  }, function(err, resp) {
-    if (err) {
-      callback(err, null, null, resp);
-      return;
-    }
+  this.request(
+    {
+      uri: '/trainedmodels/list',
+      qs: query,
+    },
+    function(err, resp) {
+      if (err) {
+        callback(err, null, null, resp);
+        return;
+      }
 
-    var models = arrify(resp.items).map(function(model) {
-      var modelInstance = self.model(model.id);
-      modelInstance.metadata = model;
-      return modelInstance;
-    });
-
-    var nextQuery = null;
-
-    if (resp.nextPageToken) {
-      nextQuery = extend({}, query, {
-        pageToken: resp.nextPageToken
+      var models = arrify(resp.items).map(function(model) {
+        var modelInstance = self.model(model.id);
+        modelInstance.metadata = model;
+        return modelInstance;
       });
-    }
 
-    callback(null, models, nextQuery, resp);
-  });
+      var nextQuery = null;
+
+      if (resp.nextPageToken) {
+        nextQuery = extend({}, query, {
+          pageToken: resp.nextPageToken,
+        });
+      }
+
+      callback(null, models, nextQuery, resp);
+    }
+  );
 };
 
 /**
@@ -328,9 +334,8 @@ common.paginator.extend(Prediction, 'getModels');
  * that a callback is omitted.
  */
 common.util.promisifyAll(Prediction, {
-  exclude: ['model']
+  exclude: ['model'],
 });
-
 
 Prediction.Model = Model;
 

@@ -21,14 +21,13 @@ var async = require('async');
 var Storage = require('@google-cloud/storage');
 var uuid = require('uuid');
 
-var env = require('../../../system-test/env.js');
 var Prediction = require('../');
 
 describe('Prediction', function() {
   var TESTS_PREFIX = 'gcloud-test-prediction-';
 
-  var prediction = new Prediction(env);
-  var storage = new Storage(env);
+  var prediction = new Prediction();
+  var storage = new Storage();
 
   var bucket = storage.bucket(generateName());
   var file = bucket.file('language_id.txt');
@@ -45,42 +44,45 @@ describe('Prediction', function() {
   });
 
   after(function(done) {
-    storage.getBuckets({
-      prefix: TESTS_PREFIX
-    }, function(err, buckets) {
-      if (err) {
-        done(err);
-        return;
+    storage.getBuckets(
+      {
+        prefix: TESTS_PREFIX,
+      },
+      function(err, buckets) {
+        if (err) {
+          done(err);
+          return;
+        }
+
+        function deleteBucket(bucket, callback) {
+          // After files are deleted, eventual consistency may require a bit of a
+          // delay to ensure that the bucket recognizes that the files don't exist
+          // anymore.
+          var CONSISTENCY_DELAY_MS = 250;
+
+          bucket.deleteFiles(function(err) {
+            if (err) {
+              callback(err);
+              return;
+            }
+
+            setTimeout(function() {
+              bucket.delete(function() {
+                // Ignoring this error:
+                // https://github.com/GoogleCloudPlatform/google-cloud-node/issues/968
+                // if (err) {
+                //   callback(err);
+                //   return;
+                // }
+                callback();
+              });
+            }, CONSISTENCY_DELAY_MS);
+          });
+        }
+
+        async.eachLimit(buckets, 10, deleteBucket, done);
       }
-
-      function deleteBucket(bucket, callback) {
-        // After files are deleted, eventual consistency may require a bit of a
-        // delay to ensure that the bucket recognizes that the files don't exist
-        // anymore.
-        var CONSISTENCY_DELAY_MS = 250;
-
-        bucket.deleteFiles(function(err) {
-          if (err) {
-            callback(err);
-            return;
-          }
-
-          setTimeout(function() {
-            bucket.delete(function() {
-              // Ignoring this error:
-              // https://github.com/GoogleCloudPlatform/google-cloud-node/issues/968
-              // if (err) {
-              //   callback(err);
-              //   return;
-              // }
-              callback();
-            });
-          }, CONSISTENCY_DELAY_MS);
-        });
-      }
-
-      async.eachLimit(buckets, 10, deleteBucket, done);
-    });
+    );
   });
 
   describe('trained models', function() {
@@ -96,12 +98,15 @@ describe('Prediction', function() {
     it('should create a model from a file', function(done) {
       var model = prediction.model(generateName());
 
-      model.create({
-        data: file
-      }, function(err) {
-        assert.ifError(err);
-        model.delete(done);
-      });
+      model.create(
+        {
+          data: file,
+        },
+        function(err) {
+          assert.ifError(err);
+          model.delete(done);
+        }
+      );
     });
 
     it('should get metadata about a model', function(done) {
@@ -130,7 +135,7 @@ describe('Prediction', function() {
       });
 
       it('should return models with a callback', function(done) {
-        prediction.getModels({ maxResults: 1 }, function(err, models) {
+        prediction.getModels({maxResults: 1}, function(err, models) {
           assert.ifError(err);
           assert.strictEqual(models.length, 1);
           done();
@@ -138,7 +143,8 @@ describe('Prediction', function() {
       });
 
       it('should return models in stream mode', function(done) {
-        prediction.getModelsStream({ maxResults: 1 })
+        prediction
+          .getModelsStream({maxResults: 1})
           .on('error', done)
           .once('data', function() {
             done();
@@ -191,32 +197,35 @@ describe('Prediction', function() {
       var model = prediction.model(generateName());
 
       before(function(done) {
-        model.create({
-          data: file
-        }, function(err) {
-          if (err) {
-            done(err);
-            return;
+        model.create(
+          {
+            data: file,
+          },
+          function(err) {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            function isModelTrained(callback) {
+              model.getMetadata(function(err, metadata) {
+                if (err) {
+                  callback(err);
+                  return;
+                }
+
+                if (metadata.trainingStatus === 'RUNNING') {
+                  callback(new Error('Model still training.'));
+                  return;
+                }
+
+                callback();
+              });
+            }
+
+            async.retry({times: 12, interval: 10000}, isModelTrained, done);
           }
-
-          function isModelTrained(callback) {
-            model.getMetadata(function(err, metadata) {
-              if (err) {
-                callback(err);
-                return;
-              }
-
-              if (metadata.trainingStatus === 'RUNNING') {
-                callback(new Error('Model still training.'));
-                return;
-              }
-
-              callback();
-            });
-          }
-
-          async.retry({ times: 12, interval: 10000 }, isModelTrained, done);
-        });
+        );
       });
 
       after(function(done) {

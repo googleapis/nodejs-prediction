@@ -25,7 +25,7 @@ const text = `good night`;
 
 test.before(tools.checkCredentials);
 
-test(`should predict`, async (t) => {
+test(`should predict`, async t => {
   const output = await tools.runAsync(`${cmd} "${text}"`, cwd);
   t.true(output.includes(`Sentiment for "${text}": positive`));
 });

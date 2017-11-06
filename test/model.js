@@ -54,7 +54,7 @@ describe('Index', function() {
 
   var PREDICTION = {
     projectId: 'project-id',
-    createModel: util.noop
+    createModel: util.noop,
   };
   var ID = 'model-id';
 
@@ -62,8 +62,8 @@ describe('Index', function() {
     Model = proxyquire('../src/model.js', {
       '@google-cloud/common': {
         ServiceObject: FakeServiceObject,
-        util: fakeUtil
-      }
+        util: fakeUtil,
+      },
     });
   });
 
@@ -80,8 +80,8 @@ describe('Index', function() {
           bind: function(context) {
             assert.strictEqual(context, predictionInstance);
             createMethodBound = true;
-          }
-        }
+          },
+        },
       });
 
       var model = new Model(predictionInstance, ID);
@@ -100,9 +100,9 @@ describe('Index', function() {
         getMetadata: true,
         setMetadata: {
           reqOpts: {
-            method: 'PUT'
-          }
-        }
+            method: 'PUT',
+          },
+        },
       });
 
       assert.strictEqual(createMethodBound, true);
@@ -146,7 +146,7 @@ describe('Index', function() {
     describe('success', function() {
       var apiResponse = {
         dataDescription: 'data',
-        modelDescription: 'model'
+        modelDescription: 'model',
       };
 
       beforeEach(function() {
@@ -160,7 +160,7 @@ describe('Index', function() {
           assert.ifError(err);
           assert.deepEqual(analysis, {
             data: apiResponse.dataDescription,
-            model: apiResponse.modelDescription
+            model: apiResponse.modelDescription,
           });
           assert.strictEqual(apiResponse_, apiResponse);
           done();
@@ -201,7 +201,7 @@ describe('Index', function() {
         assert.strictEqual(reqOpts.uri, '');
         assert.deepEqual(reqOpts.headers, {
           accept: 'application/json',
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         });
 
         setImmediate(done);
@@ -265,7 +265,7 @@ describe('Index', function() {
       describe('handling the response', function() {
         it('should call handle the response on complete event', function(done) {
           var response = {
-            body: {}
+            body: {},
           };
 
           utilOverrides.handleResp = function(err, resp, body) {
@@ -326,7 +326,7 @@ describe('Index', function() {
 
       var expectedData = JSON.stringify({
         output: LABEL,
-        csvInstance: [INPUT]
+        csvInstance: [INPUT],
       });
 
       beforeEach(function(done) {
@@ -352,10 +352,12 @@ describe('Index', function() {
       it('should properly stringify the input', function(done) {
         var jsonStream = pipeline[1];
 
-        jsonStream.pipe(concat(function(dataWritten) {
-          assert.strictEqual(dataWritten, expectedData);
-          done();
-        }));
+        jsonStream.pipe(
+          concat(function(dataWritten) {
+            assert.strictEqual(dataWritten, expectedData);
+            done();
+          })
+        );
 
         writeStream.end(INPUT);
       });
@@ -389,8 +391,8 @@ describe('Index', function() {
         assert.strictEqual(reqOpts.uri, '/predict');
         assert.deepEqual(reqOpts.json, {
           input: {
-            csvInstance: [input]
-          }
+            csvInstance: [input],
+          },
         });
         done();
       };
@@ -423,12 +425,12 @@ describe('Index', function() {
         outputLabel: 'label',
         outputMulti: [
           {
-            score: '0.00000'
+            score: '0.00000',
           },
           {
-            score: '1.00000'
-          }
-        ]
+            score: '1.00000',
+          },
+        ],
       };
 
       beforeEach(function() {
@@ -454,7 +456,7 @@ describe('Index', function() {
 
       it('should return the outputValue as the winner', function(done) {
         var apiResponseWithValue = extend({}, apiResponse, {
-          outputValue: 44
+          outputValue: 44,
         });
 
         delete apiResponseWithValue.outputLabel;
