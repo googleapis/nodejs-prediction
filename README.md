@@ -2,8 +2,6 @@
 
 # Google Prediction API: Node.js Client
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/googleapis/nodejs-prediction.svg)](https://greenkeeper.io/)
-
 [![release level](https://img.shields.io/badge/release%20level-deprecated-red.svg?style&#x3D;flat)](https://cloud.google.com/terms/launch-stages)
 [![CircleCI](https://img.shields.io/circleci/project/github/googleapis/nodejs-prediction.svg?style=flat)](https://circleci.com/gh/googleapis/nodejs-prediction)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/googleapis/nodejs-prediction?branch=master&svg=true)](https://ci.appveyor.com/project/googleapis/nodejs-prediction)
