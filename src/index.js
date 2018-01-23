@@ -58,9 +58,10 @@ var Model = require('./model.js');
  */
 function Prediction(options) {
   if (!(this instanceof Prediction)) {
-    options = common.util.normalizeArguments(this, options);
     return new Prediction(options);
   }
+
+  options = common.util.normalizeArguments(this, options);
 
   var config = {
     baseUrl: 'https://www.googleapis.com/prediction/v1.6',
