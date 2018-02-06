@@ -48,7 +48,7 @@
     "test": "repo-tools test run --cmd npm -- run cover"
   },
   "dependencies": {
-    "@google-cloud/common": "^0.15.1",
+    "@google-cloud/common": "^0.16.0",
     "JSONStream": "^1.0.7",
     "arrify": "^1.0.0",
     "extend": "^3.0.0",
