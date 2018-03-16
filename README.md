@@ -1,6 +1,6 @@
 <img src="https://avatars2.githubusercontent.com/u/2810941?v=3&s=96" alt="Google Cloud Platform logo" title="Google Cloud Platform" align="right" height="96" width="96"/>
 
-# Google Prediction API: Node.js Client
+# [Google Prediction API: Node.js Client](https://github.com/googleapis/nodejs-prediction)
 
 [![release level](https://img.shields.io/badge/release%20level-deprecated-red.svg?style&#x3D;flat)](https://cloud.google.com/terms/launch-stages)
 [![CircleCI](https://img.shields.io/circleci/project/github/googleapis/nodejs-prediction.svg?style=flat)](https://circleci.com/gh/googleapis/nodejs-prediction)
@@ -16,6 +16,7 @@ The [Cloud Prediction API](https://cloud.google.com/prediction/docs) provides a 
 | This library is **deprecated**. The API will be shut down on April 30, 2018. See the [Prediction API End of Life FAQ](https://cloud.google.com/prediction/docs/end-of-life-faq) for more information. |
 
 * [Prediction API Node.js Client API Reference][client-docs]
+* [github.com/googleapis/nodejs-prediction](https://github.com/googleapis/nodejs-prediction)
 * [Prediction API Documentation][product-docs]
 
 Read more about the client libraries for Cloud APIs, including the older
@@ -133,12 +134,12 @@ function predict(phrase, callback) {
 
 ## Samples
 
-Samples are in the [`samples/`](https://github.com/googleapis/nodejs-prediction/blob/master/samples) directory. The samples' `README.md`
+Samples are in the [`samples/`](https://github.com/googleapis/nodejs-prediction/tree/master/samples) directory. The samples' `README.md`
 has instructions for running the samples.
 
-| Sample                      | Source Code                       |
-| --------------------------- | --------------------------------- |
-| Hosted Models | [source code](https://github.com/googleapis/nodejs-prediction/blob/master/samples/hostedmodels.js) |
+| Sample                      | Source Code                       | Try it |
+| --------------------------- | --------------------------------- | ------ |
+| Hosted Models | [source code](https://github.com/googleapis/nodejs-prediction/blob/master/samples/hostedmodels.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-prediction&page=editor&open_in_editor=samples/hostedmodels.js,samples/README.md) |
 
 The [Prediction API Node.js Client API Reference][client-docs] documentation
 also contains samples.
@@ -157,13 +158,14 @@ More Information: [Google Cloud Platform Launch Stages][launch_stages]
 
 ## Contributing
 
-Contributions welcome! See the [Contributing Guide](.github/CONTRIBUTING.md).
+Contributions welcome! See the [Contributing Guide](https://github.com/googleapis/nodejs-prediction/blob/master/.github/CONTRIBUTING.md).
 
 ## License
 
 Apache Version 2.0
 
-See [LICENSE](LICENSE)
+See [LICENSE](https://github.com/googleapis/nodejs-prediction/blob/master/LICENSE)
 
 [client-docs]: https://cloud.google.com/nodejs/docs/reference/prediction/latest/
 [product-docs]: https://cloud.google.com/prediction/docs
+[shell_img]: //gstatic.com/cloudssh/images/open-btn.png

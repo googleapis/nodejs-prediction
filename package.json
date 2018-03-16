@@ -29,12 +29,15 @@
   ],
   "contributors": [
     "Ace Nassri <anassri@google.com>",
+    "Alexander Fenster <github@fenster.name>",
     "Dave Gramlich <callmehiphop@gmail.com>",
     "Eric Uldall <ericuldall@gmail.com>",
     "Jason Dobry <jdobry@google.com>",
     "Luke Sneeringer <lukesneeringer@google.com>",
+    "Stephen <stephenplusplus@users.noreply.github.com>",
     "Stephen Sawchuk <sawchuk@gmail.com>",
-    "Tim Swast <swast@google.com>"
+    "Tim Swast <swast@google.com>",
+    "greenkeeper[bot] <greenkeeper[bot]@users.noreply.github.com>"
   ],
   "scripts": {
     "cover": "nyc --reporter=lcov mocha --require intelli-espower-loader test/*.js && nyc report",
@@ -59,7 +62,7 @@
     "through2": "^2.0.0"
   },
   "devDependencies": {
-    "@google-cloud/nodejs-repo-tools": "^2.0.11",
+    "@google-cloud/nodejs-repo-tools": "^2.2.4",
     "@google-cloud/storage": "*",
     "async": "^2.5.0",
     "codecov": "^3.0.0",
