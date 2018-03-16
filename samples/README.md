@@ -2,7 +2,7 @@
 
 # Google Prediction API: Node.js Samples
 
-[![Build](https://storage.googleapis.com/.svg)]()
+[![Open in Cloud Shell][shell_img]][shell_link]
 
 The [Cloud Prediction API](https://cloud.google.com/prediction/docs) provides a RESTful API to build Machine Learning models.
 
@@ -24,6 +24,8 @@ library's README.
 
 View the [source code][hostedmodels_0_code].
 
+[![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-prediction&page=editor&open_in_editor=samples/hostedmodels.js,samples/README.md)
+
 __Usage:__ `node hostedmodels <phrase>`
 
 ```
@@ -32,3 +34,6 @@ node hostedmodels "Hello world"
 
 [hostedmodels_0_docs]: https://cloud.google.com/prediction/docs/developer-guide#predictionfromappengine
 [hostedmodels_0_code]: hostedmodels.js
+
+[shell_img]: //gstatic.com/cloudssh/images/open-btn.png
+[shell_link]: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-prediction&page=editor&open_in_editor=samples/README.md
