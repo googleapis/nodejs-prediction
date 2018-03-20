@@ -9,7 +9,7 @@
     "node": ">=4.3.2"
   },
   "scripts": {
-    "test": "samples test run --cmd ava -- -T 1m --verbose system-test/*.test.js"
+    "test": "repo-tools test run --cmd ava -- -T 1m --verbose system-test/*.test.js"
   },
   "dependencies": {
     "googleapis": "20.1.0"
