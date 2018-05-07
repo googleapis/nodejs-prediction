@@ -15,8 +15,7 @@
     "CONTRIBUTORS",
     "LICENSE"
   ],
-  "keywords": [
-  ],
+  "keywords": [],
   "contributors": [
     "Ace Nassri <anassri@google.com>",
     "Alexander Fenster <github@fenster.name>",
@@ -29,10 +28,7 @@
     "Tim Swast <swast@google.com>",
     "greenkeeper[bot] <greenkeeper[bot]@users.noreply.github.com>"
   ],
-  "scripts": {
-  },
-  "dependencies": {
-  },
-  "devDependencies": {
-  }
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {}
 }
